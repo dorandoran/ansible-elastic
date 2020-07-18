@@ -1,0 +1,15 @@
+---
+- name: Configure Elasticsearch nodes
+  # hosts: cluster
+  hosts: localhost
+  gather_facts: no
+  become: yes
+  tasks:
+    # - name: Establish SSH Connection
+    #   become: no
+    #   import_role:
+    #     name: establish_connection
+    - name: Configure and Enable Elasticsearch Node
+      import_role:
+        name: elastic.elasticsearch
+        tasks_from: enable_node.yml

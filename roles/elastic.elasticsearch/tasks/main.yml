@@ -1,0 +1,22 @@
+# Steps followed from https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+---
+- name: Download and add Elastic GPG public signing key
+  rpm_key:
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Save the Elasticsearch repository definition
+  yum_repository:
+    name: elasticsearch
+    description: Elasticsearch repository for 7.x packages
+    baseurl: https://artifacts.elastic.co/packages/7.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: no
+    state: present
+
+- name: Install Elasticsearch
+  yum: # Instead of package, use this to enable repo
+    name: elasticsearch
+    enablerepo: elasticsearch
+    state: present

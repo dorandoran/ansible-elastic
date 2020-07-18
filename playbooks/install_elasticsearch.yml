@@ -1,0 +1,16 @@
+---
+- name: Install Elasticsearch Node
+  hosts: cluster
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Establish SSH Connection
+      become: no
+      import_role:
+        name: establish_connection
+    - name: Install Java
+      import_role:
+        name: java
+    - name: Install Elasticsearch
+      import_role:
+        name: elastic.elasticsearch

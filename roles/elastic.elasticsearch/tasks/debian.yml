@@ -1,0 +1,23 @@
+# Steps followed from https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+---
+- name: Install apt-transport-https package
+  apt:
+    name: apt-transport-https
+
+- name: Download and add Elastic GPG public signing key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Save the Elasticsearch repository definition
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+    state: present
+
+- name: Update current system - "sudo apt-get update"
+  apt:
+      update_cache: yes
+
+- name: Install Elasticsearch
+  apt:
+    name: elasticsearch

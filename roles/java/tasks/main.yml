@@ -1,0 +1,17 @@
+---
+- name: Install Java Runtime Environment
+  package: # TODO: Make this dynamic to OS
+    name: java-11-openjdk-devel # Centos
+    # name: default-jre # Debian
+    state: present
+
+- name: Test if Java is installed
+  command: java -version
+  ignore_errors: yes
+  changed_when: java_response.rc != 0
+  register: java_response
+
+- name: Provide user feedback if Java not found after installation
+  fail:
+    msg: 'JAVA_INSTALL_ERROR: Java could not be found on host computer. See the main README.md for more information.'
+  when: java_response.rc == 2
