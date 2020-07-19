@@ -14,14 +14,18 @@
 #
 # Use a descriptive name for your cluster:
 #
-cluster.name: code-editor-test
+cluster.name: {{ elastic_cluster_name }}
+
 #
 # ------------------------------------ Node ------------------------------------
 #
 # Use a descriptive name for the node:
 #
-node.name: 'elastic-{{ inventory_hostname }}'
-network.host: '{{ ansible_host }}'
+node.name: {{ elastic_node_name_prefix }}{{ inventory_hostname }}
+node.master: true
+node.data: true
+node.ingest: false
+node.ml: false
 #
 # Add custom attributes to the node:
 #
@@ -53,11 +57,12 @@ path.logs: /var/log/elasticsearch
 #
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
-#network.host: 192.168.0.1
+network.host: {{ ansible_host }}
 #
 # Set a custom port for HTTP:
 #
-#http.port: 9200
+http.port: {{ elastic_http_port }}
+transport.port: {{ elastic_transport_port }}
 #
 # For more information, consult the network module documentation.
 #
@@ -66,11 +71,11 @@ path.logs: /var/log/elasticsearch
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-#discovery.seed_hosts: ["host1", "host2"]
+discovery.seed_hosts: {{ groups['cluster'] | map('extract', hostvars, ['ansible_host']) | list }}
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
-#cluster.initial_master_nodes: ["node-1", "node-2"]
+cluster.initial_master_nodes: {{ groups['cluster'] | format_list(elastic_node_name_prefix) }}
 #
 # For more information, consult the discovery and cluster formation module documentation.
 #
@@ -86,4 +91,5 @@ path.logs: /var/log/elasticsearch
 #
 # Require explicit names when deleting indices:
 #
+#action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*
 #action.destructive_requires_name: true
