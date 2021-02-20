@@ -3,15 +3,15 @@
 - name: SSH Key File Test
   delegate_to: localhost
   block:
-  - name: Test path of private key
-    stat:
-      path: '{{ ssh_key_path }}/{{ ssh_key_filename }}'
-    register: private_key
+    - name: Testing path of private key
+      stat:
+        path: '{{ ssh_key_path }}/{{ ssh_key_filename }}'
+      register: private_key
 
-  - name: Provide user feedback if private key does not exist
-    fail:
-      msg: 'SSH_KEY_ERROR: Cannot find {{ ssh_key_filename }} in path provided. See the main README.md for more information.'
-    when: not private_key.stat.exists
+    - name: Provide user feedback if private key does not exist
+      fail:
+        msg: 'SSH_KEY_ERROR: Cannot find {{ ssh_key_filename }} in path provided. See the main README.md for more information.'
+      when: not private_key.stat.exists
 
 # Connection tests and bypass EDSCA fingerprint
 - name: Ping host with user and private key
@@ -30,4 +30,3 @@
   no_log: no
   ignore_errors: no
   ignore_unreachable: no
-  

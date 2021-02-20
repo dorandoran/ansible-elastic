@@ -1,0 +1,22 @@
+---
+- name: Updating kibana.yml file
+  become: yes
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+    force: yes
+    owner: root
+    group: kibana
+    mode: 0660 # Make sure to have read access
+
+- name: Start and enable Kibana service
+  become: yes
+  service:
+    name: kibana
+    enabled: yes
+    state: started
+
+- name: Verify contact to elasticsearch
+  uri:
+    url: 'http://{{ groups["coord_only_nodes"] | map("extract", hostvars, ["ansible_host"]) | first }}:{{ elastic_http_port }}/'
+    method: GET

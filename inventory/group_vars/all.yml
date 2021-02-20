@@ -1,10 +1,34 @@
 ---
 # Authentication variables
-default_ssh_user: elastic-user            # user when ssh into hosts
-ssh_key_filename: elastic-key.pem         # filename of ssh key file
-ssh_key_path: /home/elastic-user/.ssh     # path to ssh key file
+default_ssh_user: elk # user when ssh into hosts
+ssh_key_filename: id_rsa.pub # filename of ssh key file
+ssh_key_path: /home/elk/.ssh # path to ssh key file
 
 # Ansible variables
+# https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-handle-python-pathing-not-having-a-python-2-x-in-usr-bin-python-on-a-remote-machine
+# ansible_python_interpreter: /usr/bin/python3
+ansible_base_path: '{{ role_path }}/../..'
 ansible_ssh_user: '{{ default_ssh_user }}'
 ansible_ssh_private_key_file: '{{ ssh_key_path }}/{{ ssh_key_filename }}'
-ansible_python_interpreter: /usr/bin/python3 # https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-handle-python-pathing-not-having-a-python-2-x-in-usr-bin-python-on-a-remote-machine
+ansible_become_pass: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  30396366363431366639653439666335623534326566393062666137633536393062313032363538
+  6366623933663666333964363161356465643164623337390a353834346165643837393161306638
+  64316565386239646262613634613565356439383365346238313734346537363035363863313539
+  3064356636613137320a613736303366393635326331376665383665663135313733616436346438
+  3733
+
+# Elastic Attributes
+elastic_repo_url: https://artifacts.elastic.co/packages/7.x/yum
+
+# Elasticsearch package name/version
+elasticsearch_package_name: elasticsearch-7.11.1
+kibana_package_name: 'kibana-7.11.1'
+
+elastic_cluster_name: novetta-dev-cluster
+elastic_http_port: 9200
+elastic_transport_port: 9300
+kibana_communication_port: 5601
+
+elastic_node_attribute_names:
+  - 'rack'

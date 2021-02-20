@@ -1,0 +1,27 @@
+---
+- name: Download and Install Elasticsearch and Requirements
+  hosts: elasticsearch
+  gather_facts: no
+  pre_tasks:
+    - name: Establish SSH conneciton
+      import_role:
+        name: establish-connection
+  tasks:
+    - name: Update hosts
+      import_role:
+        name: update-hosts
+
+    - name: Install Elasticsearch
+      import_role:
+        name: elasticsearch
+        tasks_from: install.yml
+
+    - name: Adjust Firewall
+      import_role:
+        name: elasticsearch
+        tasks_from: firewall.yml
+
+    - name: Configure Elasticsearch
+      import_role:
+        name: elasticsearch
+        tasks_from: configure.yml

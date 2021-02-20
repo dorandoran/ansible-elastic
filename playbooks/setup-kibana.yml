@@ -1,0 +1,27 @@
+---
+- name: Download and Install Kibana and Requirements
+  hosts: kibana
+  gather_facts: yes
+  pre_tasks:
+    - name: Establish SSH connection
+      import_role:
+        name: establish-connection
+  tasks:
+    - name: Update hosts
+      import_role:
+        name: update-hosts
+
+    - name: Install Kibana
+      import_role:
+        name: kibana
+        tasks_from: install.yml
+
+    - name: Adjust Firewall
+      import_role:
+        name: kibana
+        tasks_from: firewall.yml
+
+    - name: Configure Kibana
+      import_role:
+        name: kibana
+        tasks_from: configure.yml

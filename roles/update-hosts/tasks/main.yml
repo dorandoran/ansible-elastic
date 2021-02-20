@@ -1,0 +1,24 @@
+---
+- name: Update packages
+  become: yes
+  package:
+    name: '*'
+    state: latest
+
+# Ubuntu
+# TODO: Add logic to determine OS and perform correct restart check
+# - name: Check if reboot is required
+#   stat:
+#     path: /var/run/reboot-required
+#   register: restart_response
+
+- name: Checking if reboot is required
+  command: needs-restarting -r1
+  register: restart_response
+  failed_when: no
+  changed_when: restart_response.rc == 1
+
+- name: Restart if required
+  become: yes
+  when: restart_response.rc == 1
+  reboot:

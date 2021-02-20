@@ -1,16 +1,6 @@
+---
 # Elasticsearch config path (elasticsearch.yml)
 elastic_config_path: /etc/elasticsearch/elasticsearch.yml
-
-elastic_cluster_name: elastic
-
-# Prefix that appends to each hostname, {{ elastic_node_name_prefix }}{{ hostname }}
-elastic_node_name_prefix: '{{ elastic_cluster_name }}-'
-
-# Elasticsearch port
-elastic_http_port: 9226
-
-# Port nodes use to communicate
-elastic_transport_port: 9227
 
 # Elasticsearch suggest no more than 50% of physical RAM
 # https://www.elastic.co/guide/en/elasticsearch/reference/current/heap-size.html
@@ -18,7 +8,10 @@ elastic_transport_port: 9227
 # Where g = gibibytes  m = mebibytes
 elastic_heap_config_path: /etc/elasticsearch/jvm.options
 
-elastic_heap_min: '-Xms1g'
-elastic_heap_max: '-Xmx1g'
+elastic_heap_min: '-Xms8g'
+elastic_heap_max: '-Xmx8g'
 
 elastic_heap_dump_path: /var/lib/elasticsearch
+
+elastic_data_path: /var/lib/elasticsearch
+elastic_log_path: /var/log/elasticsearch

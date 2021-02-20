@@ -1,0 +1,24 @@
+---
+- name: Download and add Elastic GPG public signing key
+  become: yes
+  rpm_key:
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Save the Elasticsearch repository definition
+  become: yes
+  yum_repository:
+    name: elasticsearch
+    description: Elasticsearch repository for 7.x packages
+    baseurl: '{{ elastic_repo_url }}'
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: no
+    state: present
+
+- name: Installing Kibana
+  become: yes
+  yum: # Instead of package, use this to enable repo
+    name: '{{ kibana_package_name }}'
+    enablerepo: elasticsearch
+    state: present

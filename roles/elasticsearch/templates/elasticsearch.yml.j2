@@ -21,25 +21,31 @@ cluster.name: {{ elastic_cluster_name }}
 #
 # Use a descriptive name for the node:
 #
-node.name: {{ elastic_node_name_prefix }}{{ inventory_hostname }}
-node.master: true
-node.data: true
-node.ingest: false
-node.ml: false
+node.name: {{ inventory_hostname }}
 #
 # Add custom attributes to the node:
 #
-#node.attr.rack: r1
+# Node Roles
+{{ group_names | generate_node_roles }}
+#
+# Node Attributes
+{% if elastic_node_attribute_names | length > 0 %}
+{% for attribute in elastic_node_attribute_names %}
+{% if hostvars[inventory_hostname][attribute] is defined %}
+node.attr.{{ attribute }}: {{ hostvars[inventory_hostname][attribute] }}
+{% endif %}
+{% endfor %}
+{% endif %}
 #
 # ----------------------------------- Paths ------------------------------------
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: /var/lib/elasticsearch
+path.data: {{ elastic_data_path }}
 #
 # Path to log files:
 #
-path.logs: /var/log/elasticsearch
+path.logs: {{ elastic_log_path }}
 #
 # ----------------------------------- Memory -----------------------------------
 #
@@ -71,25 +77,16 @@ transport.port: {{ elastic_transport_port }}
 # Pass an initial list of hosts to perform discovery when this node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-discovery.seed_hosts: {{ groups['cluster'] | map('extract', hostvars, ['ansible_host']) | list }}
+discovery.seed_hosts: {{ groups['elasticsearch'] | map('extract', hostvars, ['ansible_host']) | list }}
 #
 # Bootstrap the cluster using an initial set of master-eligible nodes:
 #
-cluster.initial_master_nodes: {{ groups['cluster'] | format_list(elastic_node_name_prefix) }}
+cluster.initial_master_nodes: {{ groups['master_nodes'] }}
 #
 # For more information, consult the discovery and cluster formation module documentation.
-#
-# ---------------------------------- Gateway -----------------------------------
-#
-# Block initial recovery after a full cluster restart until N nodes are started:
-#
-#gateway.recover_after_nodes: 3
-#
-# For more information, consult the gateway module documentation.
 #
 # ---------------------------------- Various -----------------------------------
 #
 # Require explicit names when deleting indices:
 #
-#action.auto_create_index: .monitoring*,.watches,.triggered_watches,.watcher-history*,.ml*
 #action.destructive_requires_name: true

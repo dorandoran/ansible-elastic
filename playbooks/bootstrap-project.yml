@@ -1,0 +1,17 @@
+---
+- name: Bootstrapping project
+  hosts: localhost
+  gather_facts: no
+  become: no
+  vars_prompt:
+    - name: admin_username
+      prompt: 'What is the ansible admin username for the environment?'
+      private: no
+    - name: admin_password
+      prompt: 'What is the password for the ansible admin user?'
+      private: yes
+  tasks:
+    - name: Storing admin password
+      import_role:
+        name: bootstrap
+        tasks_from: password.yml
