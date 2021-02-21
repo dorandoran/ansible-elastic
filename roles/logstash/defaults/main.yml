@@ -1,0 +1,3 @@
+---
+logstash_data_path: /var/log/logstash
+logstash_log_path: /var/lib/logstash

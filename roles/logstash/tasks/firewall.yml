@@ -1,0 +1,21 @@
+---
+- name: Starting firewalld
+  become: yes
+  service:
+    name: firewalld
+    state: started
+
+- name: Opening ports for Elasticsearch HTTP and Logstash
+  become: yes
+  firewalld:
+    port: '{{ item }}'
+    permanent: yes
+    state: enabled
+  loop:
+    - '{{ elastic_http_port }}/tcp'
+
+- name: Restarting firewalld
+  become: yes
+  service:
+    name: firewalld
+    state: restarted

@@ -1,4 +1,4 @@
 ---
-- import_playbook: playbooks/update_hosts.yml
-- import_playbook: playbooks/install_elasticsearch.yml
-- import_playbook: playbooks/configure_elasticsearch.yml
+- import_playbook: playbooks/setup-elasticsearch.yml
+- import_playbook: playbooks/setup-kibana.yml
+- import_playbook: playbooks/setup-logstash.yml

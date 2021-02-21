@@ -1,0 +1,17 @@
+---
+- name: Updating logstash.yml file
+  become: yes
+  template:
+    src: logstash.yml.j2
+    dest: /etc/logstash/logstash.yml
+    force: yes
+    owner: root
+    group: logstash
+    mode: 0660 # Make sure to have read access
+
+- name: Start and enable Logstash service
+  become: yes
+  service:
+    name: logstash
+    enabled: yes
+    state: started

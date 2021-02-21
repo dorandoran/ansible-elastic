@@ -19,7 +19,6 @@
 
 - name: Install Elasticsearch
   become: yes
-  yum: # Instead of package, use this to enable repo
-    name: '{{ elasticsearch_package_name }}'
-    enablerepo: elasticsearch
+  package:
+    name: 'elasticsearch-{{ elastic_version }}'
     state: present

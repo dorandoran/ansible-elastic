@@ -1,6 +1,6 @@
 ---
-- name: Download and Install Kibana and Requirements
-  hosts: kibana
+- name: Download and Install Logstash and Requirements
+  hosts: logstash
   gather_facts: no
   pre_tasks:
     - name: Establish SSH connection
@@ -11,17 +11,17 @@
       import_role:
         name: update-hosts
 
-    - name: Install Kibana
+    - name: Install Logstash
       import_role:
-        name: kibana
+        name: logstash
         tasks_from: install.yml
 
     - name: Adjust Firewall
       import_role:
-        name: kibana
+        name: logstash
         tasks_from: firewall.yml
 
-    - name: Configure Kibana
+    - name: Configure Logstash
       import_role:
-        name: kibana
+        name: logstash
         tasks_from: configure.yml

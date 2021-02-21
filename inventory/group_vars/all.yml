@@ -22,8 +22,7 @@ ansible_become_pass: !vault |
 elastic_repo_url: https://artifacts.elastic.co/packages/7.x/yum
 
 # Elasticsearch package name/version
-elasticsearch_package_name: elasticsearch-7.11.1
-kibana_package_name: 'kibana-7.11.1'
+elastic_version: 7.11.1
 
 elastic_cluster_name: novetta-dev-cluster
 elastic_http_port: 9200

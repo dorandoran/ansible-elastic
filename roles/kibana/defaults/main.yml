@@ -1,3 +1,2 @@
 ---
-elastic_http_port: 9200
 elastic_http_port_string: ':{{ elastic_http_port }}'
